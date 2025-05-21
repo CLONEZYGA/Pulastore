@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bags - Pula Store</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    body { background: #181f23; color: #f2f2f2; }
+    .product-grid { display: flex; flex-wrap: wrap; gap: 2rem; justify-content: center; margin-top: 2rem; }
+    .product-card { background: #23292e; color: #f2f2f2; border-radius: 8px; box-shadow: 0 2px 8px #0003; padding: 1rem; width: 260px; }
+    .product-image img { width: 100%; border-radius: 6px; }
+    .product-info { margin-top: 1rem; }
+    .btn { margin-top: 1rem; }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <nav class="navbar">
+      <a href="index.html" class="logo-text">PULA STORE</a>
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link">Home</a></li>
+        <li><a href="Pula Store Sneakers page .html" class="nav-link">Shop</a></li>
+        <li><a href="cart.html" class="nav-link">Cart</a></li>
+        <li><a href="Categories.html" class="nav-link">Categories</a></li>
+        <li><a href="orders.html" class="nav-link">My Orders</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main style="padding-top: 3.5rem;">
+    <h1>Bags</h1>
+    <div class="product-grid" id="bagsGrid"></div>
+  </main>
+  <script>
+    // Mock product data (should match your main.js for Bags category)
+    const products = [
+      {
+        name: 'Luxury Bags',
+        price: '600',
+        image: 'images/hermes duffel v2.webp',
+        category: 'Bags',
+        link: 'bags.html'
+      }
+      // Add more bag products here if you have them
+    ];
+    function createProductCard(product) {
+      return `
+        <div class="product-card">
+          <div class="product-image">
+            <img src="${product.image}" alt="${product.name}">
+          </div>
+          <div class="product-info">
+            <h3>${product.name}</h3>
+            <p class="category">${product.category}</p>
+            <p class="price">BWP ${product.price}</p>
+            <button class="btn primary-btn" onclick="addToCart('${product.name}', '${product.price}', '${product.image}')">Add to Cart</button>
+          </div>
+        </div>
+      `;
+    }
+    function addToCart(name, price, image) {
+      let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+      cart.push({ name, price: 'BWP ' + price, image });
+      localStorage.setItem('cart', JSON.stringify(cart));
+      alert('Added to cart!');
+    }
+    document.getElementById('bagsGrid').innerHTML = products.map(createProductCard).join('');
+  </script>
+</body>
+</html> 

@@ -104,7 +104,7 @@ const products = [
         price: ' 600',
         image: 'images/hermes duffel v2.webp',
         category: 'Bags',
-        link: 'Categories.html#Bags'
+        link: 'bags.html'
     },
     {
         name: 'Tops',
