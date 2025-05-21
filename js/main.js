@@ -5,6 +5,89 @@ AOS.init({
     offset: 100
 });
 
+// User Management System
+const userSystem = {
+    // Initialize users array in localStorage if not exists
+    init: function() {
+        if (!localStorage.getItem('users')) {
+            localStorage.setItem('users', JSON.stringify([]));
+        }
+    },
+
+    // Register a new user
+    register: function(userData) {
+        const users = JSON.parse(localStorage.getItem('users'));
+        
+        // Check if email already exists
+        if (users.some(user => user.email === userData.email)) {
+            throw new Error('Email already registered');
+        }
+
+        // Add new user
+        users.push({
+            ...userData,
+            id: Date.now().toString(), // Simple unique ID
+            dateRegistered: new Date().toISOString()
+        });
+
+        localStorage.setItem('users', JSON.stringify(users));
+        return true;
+    },
+
+    // Login user
+    login: function(email, password) {
+        const users = JSON.parse(localStorage.getItem('users'));
+        const user = users.find(u => u.email === email && u.password === password);
+        
+        if (user) {
+            // Store logged in user info (excluding password)
+            const { password, ...userInfo } = user;
+            localStorage.setItem('currentUser', JSON.stringify(userInfo));
+            return userInfo;
+        }
+        return null;
+    },
+
+    // Logout user
+    logout: function() {
+        localStorage.removeItem('currentUser');
+    },
+
+    // Get current user
+    getCurrentUser: function() {
+        return JSON.parse(localStorage.getItem('currentUser'));
+    },
+
+    // Check if user is logged in
+    isLoggedIn: function() {
+        return !!localStorage.getItem('currentUser');
+    },
+
+    // Update user profile
+    updateProfile: function(userId, updates) {
+        const users = JSON.parse(localStorage.getItem('users'));
+        const userIndex = users.findIndex(u => u.id === userId);
+        
+        if (userIndex === -1) return false;
+
+        // Update user data
+        users[userIndex] = { ...users[userIndex], ...updates };
+        localStorage.setItem('users', JSON.stringify(users));
+
+        // Update current user if it's the logged in user
+        const currentUser = this.getCurrentUser();
+        if (currentUser && currentUser.id === userId) {
+            const { password, ...userInfo } = users[userIndex];
+            localStorage.setItem('currentUser', JSON.stringify(userInfo));
+        }
+
+        return true;
+    }
+};
+
+// Initialize user system
+userSystem.init();
+
 // Custom cursor
 const cursor = document.querySelector('.cursor');
 const cursorFollower = document.querySelector('.cursor-follower');

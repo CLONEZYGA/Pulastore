@@ -22,7 +22,8 @@
                 <li><a href="index.html" class="nav-link">Home</a></li>
                 <li><a href="Pula Store Sneakers page .html" class="nav-link">Shop</a></li>
                 <li><a href="cart.html" class="nav-link">Cart <span class="cart-count">0</span></a></li>
-                <li><a href="login.html" class="nav-link">Login</a></li>
+                <li><a href="profile.html" class="nav-link" id="profileLink">Profile</a></li>
+                <li><a href="#" class="nav-link" id="loginLink">Login</a></li>
                 <li><a href="register.html" class="nav-link active">Register</a></li>
                 <li><a href="Categories.html" class="nav-link">Categories</a></li>
                 <li><a href="Ecommerce- About page .html" class="nav-link">About</a></li>
@@ -41,7 +42,8 @@
             <p class="subtitle">Join Pula Store for a futuristic shopping experience</p>
         </section>
         <section class="register-form-section">
-            <form class="register-form" style="max-width: 500px; margin: 2rem auto; background:rgba(255,255,255,0.03); padding:2rem 2.5rem; border-radius:18px; box-shadow:0 2px 24px rgba(0,247,255,0.08);">
+            <form class="register-form" id="registerForm" style="max-width: 500px; margin: 2rem auto; background:rgba(255,255,255,0.03); padding:2rem 2.5rem; border-radius:18px; box-shadow:0 2px 24px rgba(0,247,255,0.08);">
+                <div id="error-message" style="display: none; color: #ff4444; margin-bottom: 1rem; padding: 0.5rem; background: rgba(255,68,68,0.1); border-radius: 4px;"></div>
                 <div style="margin-bottom:1rem;">
                     <label for="customerid" style="color:var(--primary-color); font-weight:600;">Customer ID</label>
                     <input type="text" id="customerid" name="customerid" placeholder="customerid" required style="width:100%; padding:0.75rem 1rem; border-radius:8px; border:1px solid var(--primary-color); background:rgba(0,0,0,0.2); color:#fff;">
@@ -147,5 +149,45 @@
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="js/main.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const errorDiv = document.getElementById('error-message');
+            errorDiv.style.display = 'none';
+            
+            try {
+                // Get form data
+                const formData = {
+                    customerId: document.getElementById('customerid').value,
+                    firstName: document.getElementById('firstname').value,
+                    surname: document.getElementById('surname').value,
+                    gender: document.getElementById('gender').value,
+                    maritalStatus: document.querySelector('input[name="maritalstatus"]:checked')?.value,
+                    dob: document.getElementById('dob').value,
+                    omang: document.getElementById('omang').value,
+                    email: document.getElementById('email').value,
+                    password: document.getElementById('password').value,
+                    country: document.getElementById('country').value,
+                    dateRegistered: document.getElementById('dateregistered').value,
+                    timeRegistered: document.getElementById('Timeregsitered').value
+                };
+
+                // Register user
+                userSystem.register(formData);
+                
+                // Auto login after registration
+                userSystem.login(formData.email, formData.password);
+                
+                // Redirect to profile page
+                window.location.href = 'profile.html';
+                
+            } catch (error) {
+                errorDiv.textContent = error.message;
+                errorDiv.style.display = 'block';
+            }
+        });
+    </script>
 </body>
 </html>
